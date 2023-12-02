@@ -14,6 +14,80 @@ export const getPropsTest = () =>{
 
 
 export default function Home() {
+  const [showModal, setShowModal] = useState(false);
+  const [tickets, setTickets ] = useState([]);
+  const router = useRouter();
+  useEffect(() => {
+      fetchPending()
+  },  [router.isReady]);
+
+
+  function fetchPending(){
+    getPropsTest()
+    console.log("Fetch pending")
+    kitchenFacade.getPendingTickets().then(setTickets);
+  }
+  function fetchInProgress(){
+    console.log("Fetch in progress")
+    kitchenFacade.getInProgressTickets().then(setTickets)
+  }
+
+  function getStatusNameByStatus(status){
+    switch (status) {
+      case 1:
+        return 'Pending';
+      case 2:
+        return 'In Progress';
+      case 3:
+        return 'Done';
+      case 4:
+        return 'Denied';
+    }
+  }
+
+  function fetchAll(){
+    console.log("Fetch all")
+    kitchenFacade.getAllTickets().then(setTickets);
+  }
+
+  function denyTicket(e){
+    kitchenFacade.denyTicket(e.target.id)
+    setTickets(tickets.filter(t => t.id != e.target.id))
+  }
+
+  function doneTicket(e){
+    kitchenFacade.doneTicket(e.target.id)
+    setTickets(tickets.filter(t => t.id != e.target.id))
+  }
+
+  function handleAcceptClick(e) {
+    setCurrentAcceptTicket(e.target.id)
+    setShowModal(true);
+  };
+
+  const[pickupTime,setPickupTime] = useState('');
+
+
+  const[currentAcceptTicket,setCurrentAcceptTicket] = useState(0);
+
+  function handleConfirmClick () {
+    console.log('Selected Pickup Date and Time:', pickupTime);
+
+    let ticket ={
+      id: currentAcceptTicket,
+      pickupTime: pickupTime
+    }
+
+    console.log(pickupTime)
+
+    kitchenFacade.acceptTicket(ticket)
+    setTickets(tickets.filter(t => t.id != currentAcceptTicket))
+    // Close the modal
+    setCurrentAcceptTicket(0)
+    setShowModal(false);
+  };
+
+
   return (
     <div className="contentContainer shadow-sm p-3 mb-5 bg-white rounded">
       <Container>
