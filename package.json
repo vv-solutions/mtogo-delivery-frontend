@@ -21,7 +21,8 @@
     "react-bootstrap": "^2.5.0",
     "react-dom": "18.2.0",
     "react-tabs": "^6.0.2",
-    "selenium-webdriver": "^4.15.0"
+    "selenium-webdriver": "^4.15.0",
+    "yarn": "^1.22.21"
   },
   "devDependencies": {
     "@cucumber/cucumber": "^10.0.1",
